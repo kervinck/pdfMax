@@ -7,6 +7,8 @@
  *  TODO: BSD 3-clause licence?
  */
 
+#define _XOPEN_SOURCE
+
 // Standard includes
 #include <assert.h>
 #include <float.h>

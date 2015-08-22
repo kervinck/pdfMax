@@ -1,4 +1,5 @@
-CFLAGS=-Wall -O3
+CFLAGS:=-Wall -O3 -std=c99
+LOADLIBES:=-lm
 
 all: module pdfMaxTest
 
