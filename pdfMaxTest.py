@@ -9,8 +9,6 @@ def Test(pdfList):
                         significance = 10.0 ** -i
                         print pdfMax(pdfList, significance)
 
-
-
 if __name__ == '__main__':
         Test([(0.123, 0.456)]);
 

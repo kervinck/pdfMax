@@ -1,11 +1,14 @@
 CFLAGS=-Wall -O3
 
-all: module
+all: module pdfMaxTest
 
 module:
 	python setup.py build
 
 test:
+	@echo "Raw:"
+	./pdfMaxTest
+	@echo "Module:"
 	python pdfMaxTest.py
 
 pdfMaxTest : pdfMaxTest.c pdfMax.c

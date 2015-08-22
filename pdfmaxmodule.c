@@ -34,6 +34,11 @@ pdfmaxmodule_pdfMax(PyObject *self, PyObject *args)
                 return NULL;
         }
 
+        if (!PyList_Check(pyPdfList)) {
+                PyErr_SetString(PyExc_ValueError, "pdfList must be list");
+                return NULL;
+        }
+
         Py_ssize_t n = PyList_Size(pyPdfList);
 
         double pdfList[n][2];
@@ -44,14 +49,25 @@ pdfmaxmodule_pdfMax(PyObject *self, PyObject *args)
                         return NULL;
                 }
 
+                if (!PyTuple_Check(item)) {
+                        PyErr_SetString(PyExc_ValueError, "pdfList[] must be tuple");
+                        return NULL;
+                }
+
                 for (long j=0; j<2; j++) {
                         PyObject *pyFloat = PyTuple_GetItem(item, j);
                         if (!pyFloat) {
                                 return NULL;
                         }
 
+                        if (!PyFloat_Check(pyFloat)) {
+                                PyErr_SetString(PyExc_ValueError, "pdfList[][] must be float");
+                                return NULL;
+                        }
+
                         double value = PyFloat_AsDouble(pyFloat);
-                        if (value == 1.0 && PyErr_Occurred()) {
+
+                        if (value == -1.0 && PyErr_Occurred()) {
                                 return NULL;
                         }
 

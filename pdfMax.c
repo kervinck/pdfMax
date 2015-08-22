@@ -40,7 +40,7 @@ static double PDF(double x, double sigma)
  */
 static double PDF1(double x)
 {
-        static const double c = 0.91893853320467267; // log(sqrt(2.0 * M_PI))
+        static const double c = -0.91893853320467267; // -log(sqrt(2.0 * M_PI))
         return exp(c - 0.5 * x * x);
 }
 
@@ -169,7 +169,7 @@ int pdfMax(double pdfList[][2], int n, double significance,
 
                 *mu = Ex1;
                 *sigma = sqrt(Ex2 - Ex1 * Ex1);
-                odds[0] = CDF(mu1 - mu2, theta);
+                odds[0] = CDF(mu1 - mu2, theta); // First odds is simply P(A-B) > 0
                 odds[1] = 1.0 - odds[0];
 
                 return 0;
