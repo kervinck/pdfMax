@@ -17,7 +17,7 @@ FUNCTIONS
         Input arguments:
                pdfList         List of n (n > 0) Gaussians, given as (mu, sigma) tuples
                sigificance     Desired significance for the result when n > 2, meaning
-                               that either the max or the the mean+3sigma of the absolute
+                               that either the max or the mean+3sigma of the absolute
                                error stays within this bound, whichever is lowest.
         
         Output arguments:

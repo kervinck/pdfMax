@@ -34,7 +34,7 @@ PyDoc_STRVAR(pdfMax_doc,
         "Input arguments:\n"
         "       pdfList         List of n (n > 0) Gaussians, given as (mu, sigma) tuples\n"
         "       sigificance     Desired significance for the result when n > 2, meaning\n"
-        "                       that either the max or the the mean+3sigma of the absolute\n"
+        "                       that either the max or the mean+3sigma of the absolute\n"
         "                       error stays within this bound, whichever is lowest.\n"
         "\n"
         "Output arguments:\n"
