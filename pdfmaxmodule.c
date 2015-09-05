@@ -1,7 +1,15 @@
 
 /*----------------------------------------------------------------------+
- |      pdfmaxmodule.c                                                  |
+ |                                                                      |
+ |      pdfmaxmodule.c -- Python module for pdfMax                      |
+ |                                                                      |
  +----------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------+
+ |      Includes                                                        |
+ +----------------------------------------------------------------------*/
+
+#include <limits.h>
 
 #include "Python.h"
 
@@ -21,16 +29,33 @@ PyDoc_STRVAR(pdfmax_doc,
 PyDoc_STRVAR(pdfMax_doc,
         "pdfMax(pdfList, significance) -> mu, sigma, odds\n"
         "\n"
-        "Maximum of multiple Gaussians\n"
+        "Maximum of several Gaussians\n"
+        "\n"
+        "Input arguments:\n"
+        "       pdfList         List of n (n > 0) Gaussians, given as (mu, sigma) tuples\n"
+        "       sigificance     Desired significance for the result when n > 2, meaning\n"
+        "                       that either the max or the the mean+3sigma of the absolute\n"
+        "                       error stays within this bound, whichever is lowest.\n"
+        "\n"
+        "Output arguments:\n"
+        "       mu, sigma       Distribution of the maximum (estimated for n > 2)\n"
+        "       odds            List of odds that each input variable is the maximum\n"
+        "\n"
+        "Notes:\n"
+        "     - Although the max distribution is generally not exactly normal, the\n"
+        "       returned Gaussian preserves its first two moments.\n"
+        "     - An exact result is returned for n <= 2 and `significance' ignored.\n"
+        "     - For n > 2, mu, sigma and odds[] are approximated numerically within\n"
+        "       the given signicance. Below 5e-12 this calculation may become unstable.\n"
 );
 
 static PyObject *
 pdfmaxmodule_pdfMax(PyObject *self, PyObject *args)
 {
         PyObject *pyPdfList;
-        double significance;
+        double epsilon;
 
-        if (!PyArg_ParseTuple(args, "Od", &pyPdfList, &significance)) {
+        if (!PyArg_ParseTuple(args, "Od", &pyPdfList, &epsilon)) {
                 return NULL;
         }
 
@@ -40,6 +65,11 @@ pdfmaxmodule_pdfMax(PyObject *self, PyObject *args)
         }
 
         Py_ssize_t n = PyList_Size(pyPdfList);
+
+        if (n > (Py_ssize_t)INT_MAX) {
+                PyErr_SetString(PyExc_ValueError, "pdfList too long");
+                return NULL;
+        }
 
         double pdfList[n][2];
 
@@ -79,7 +109,7 @@ pdfmaxmodule_pdfMax(PyObject *self, PyObject *args)
         double sigma;
         double odds[n];
 
-        (void) pdfMax(pdfList, n, significance, &mu, &sigma, odds);
+        (void) pdfMax(pdfList, n, epsilon, &mu, &sigma, odds);
 
         PyObject *result = PyTuple_New(3);
         if (!result) {

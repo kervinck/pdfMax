@@ -7,10 +7,7 @@ module:
 	python setup.py build
 
 test:
-	@echo "Raw:"
-	./pdfMaxTest
-	@echo "Module:"
-	python pdfMaxTest.py
+	sh runPrecisionTests.sh
 
 pdfMaxTest : pdfMaxTest.c pdfMax.c
 
